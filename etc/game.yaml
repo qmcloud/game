@@ -1,0 +1,33 @@
+Name: game.rpc
+ListenOn: 0.0.0.0:9103
+
+DatabaseConf:
+  Type: mysql
+  Host: 8.134.255.9
+  Port: 13306
+  DBName: qmy_qp
+  Username: root
+  Password: xhpyYCiMCFMB4iTx
+  MaxOpenConn: 100
+  SSLMode: disable
+  CacheTime: 5
+
+RedisConf:
+  Host: 8.134.255.9:6379
+  Pass: iCpACGjHAWHJfiwn
+  Db: 0
+
+Log:
+  ServiceName: gameRpcLogger
+  Mode: file
+  Path: E:\go\qmcloud_qp\hallgame\gameServer\game\logs
+  Encoding: json
+  Level: info
+  Compress: false
+  KeepDays: 7
+  StackCoolDownMillis: 100
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4003
+  Path: /metrics
