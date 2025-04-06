@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package mms;
+package game;
 option go_package="./game";
 
 // base message
@@ -41,7 +41,7 @@ message BaseUUIDResp {
   string msg = 2;
 }
 
-service Mms {
+service Game {
   // group: base
   rpc initDatabase (Empty) returns (BaseResp);
 }

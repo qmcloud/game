@@ -26,7 +26,7 @@ message MemberRankListReq {
 }
 
 
-service Mms {
+service Game {
 
   // MemberRank management
   // group: memberrank

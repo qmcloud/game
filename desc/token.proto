@@ -29,7 +29,7 @@ message TokenListReq {
 }
 
 
-service Mms {
+service Game {
 
   // Token management
   // group: token

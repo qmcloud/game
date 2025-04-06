@@ -52,7 +52,7 @@ message UsernameReq {
   string username = 1;
 }
 
-service Mms {
+service Game {
 
   // Member management
   // group: member
