@@ -66,3 +66,4 @@
 {"@timestamp":"2025-04-10T18:58:20.019+08:00","caller":"serverinterceptors/statinterceptor.go:77","content":"127.0.0.1:51813 - /game.Game/initDatabase - {}","duration":"265.8ms","level":"info","span":"69de3ed9fbc40612","trace":"9171b937dc6b72f0ea9aadca36c9cd21"}
 {"@timestamp":"2025-04-10T19:00:14.888+08:00","caller":"prometheus/agent.go:40","content":"Starting prometheus agent at 0.0.0.0:4003","level":"info"}
 {"@timestamp":"2025-04-12T10:59:42.697+08:00","caller":"prometheus/agent.go:40","content":"Starting prometheus agent at 0.0.0.0:4003","level":"info"}
+{"@timestamp":"2025-04-12T22:21:35.203+08:00","caller":"prometheus/agent.go:40","content":"Starting prometheus agent at 0.0.0.0:4003","level":"info"}
