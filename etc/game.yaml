@@ -17,6 +17,12 @@ RedisConf:
   Pass: iCpACGjHAWHJfiwn
   Db: 0
 
+NatsConf:
+  Hosts:
+    - "nats://8.134.255.9:4222"
+  ReconnectWait: 10
+  MaxReconnect: 10
+
 Log:
   ServiceName: gameRpcLogger
   Mode: file

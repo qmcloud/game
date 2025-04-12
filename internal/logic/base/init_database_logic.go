@@ -37,7 +37,10 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 		logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
 		return nil, errorx.NewCodeError(errorcode.Internal, err.Error())
 	}
+	//测试nats
 
+	nat := l.svcCtx.Nats.Conn()
+	nat.Publish("sayaword", []byte("123"))
 	err := l.insertMemberData()
 	if err != nil {
 		return nil, err
