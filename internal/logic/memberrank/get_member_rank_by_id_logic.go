@@ -2,10 +2,7 @@ package memberrank
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-
 	"github.com/qmcloud/game/internal/svc"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -26,7 +23,8 @@ func NewGetMemberRankByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *GetMemberRankByIdLogic) GetMemberRankById(in *mms.IDReq) (*mms.MemberRankInfo, error) {
-	result, err := l.svcCtx.DB.MemberRank.Get(l.ctx, in.Id)
+	return nil, nil
+	/*result, err := l.svcCtx.DB.MemberRank.Get(l.ctx, in.Id)
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
@@ -40,4 +38,5 @@ func (l *GetMemberRankByIdLogic) GetMemberRankById(in *mms.IDReq) (*mms.MemberRa
 		Description: &result.Description,
 		Remark:      &result.Remark,
 	}, nil
+	*/
 }

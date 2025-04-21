@@ -2,10 +2,7 @@ package oauthprovider
 
 import (
 	"context"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
-
-	"github.com/suyuan32/simple-admin-common/i18n"
 
 	"github.com/qmcloud/game/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -26,21 +23,25 @@ func NewCreateOauthProviderLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *CreateOauthProviderLogic) CreateOauthProvider(in *mms.OauthProviderInfo) (*mms.BaseIDResp, error) {
-	result, err := l.svcCtx.DB.OauthProvider.Create().
-		SetNotNilName(in.Name).
-		SetNotNilClientID(in.ClientId).
-		SetNotNilClientSecret(in.ClientSecret).
-		SetNotNilRedirectURL(in.RedirectUrl).
-		SetNotNilScopes(in.Scopes).
-		SetNotNilAuthURL(in.AuthUrl).
-		SetNotNilTokenURL(in.TokenUrl).
-		SetNotNilAuthStyle(in.AuthStyle).
-		SetNotNilInfoURL(in.InfoUrl).
-		Save(l.ctx)
+	return nil, nil
+	/*
+		result, err := l.svcCtx.DB.OauthProvider.Create().
+			SetNotNilName(in.Name).
+			SetNotNilClientID(in.ClientId).
+			SetNotNilClientSecret(in.ClientSecret).
+			SetNotNilRedirectURL(in.RedirectUrl).
+			SetNotNilScopes(in.Scopes).
+			SetNotNilAuthURL(in.AuthUrl).
+			SetNotNilTokenURL(in.TokenUrl).
+			SetNotNilAuthStyle(in.AuthStyle).
+			SetNotNilInfoURL(in.InfoUrl).
+			Save(l.ctx)
 
-	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
-	}
+		if err != nil {
+			return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+		}
 
-	return &mms.BaseIDResp{Id: result.ID, Msg: i18n.CreateSuccess}, nil
+		return &mms.BaseIDResp{Id: result.ID, Msg: i18n.CreateSuccess}, nil
+
+	*/
 }

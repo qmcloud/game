@@ -2,19 +2,8 @@ package base
 
 import (
 	"context"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
-
-	"entgo.io/ent/dialect/sql/schema"
-	"github.com/suyuan32/simple-admin-common/enum/errorcode"
-	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-common/msg/logmsg"
-	"github.com/suyuan32/simple-admin-common/utils/encrypt"
-	"github.com/zeromicro/go-zero/core/errorx"
-
-	"github.com/qmcloud/game/ent"
 	"github.com/qmcloud/game/internal/svc"
 	mms "github.com/qmcloud/game/types/game"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -33,67 +22,31 @@ func NewInitDatabaseLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Init
 }
 
 func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
-	if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
-		logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
-		return nil, errorx.NewCodeError(errorcode.Internal, err.Error())
-	}
 	//测试nats
-
-	nat := l.svcCtx.Nats.Conn()
-	nat.Publish("sayaword", []byte("123"))
-	err := l.insertMemberData()
-	if err != nil {
-		return nil, err
-	}
-
-	err = l.insertMemberRankData()
-	if err != nil {
-		return nil, err
-	}
-
-	err = l.insertProviderData()
-	if err != nil {
-		return nil, err
-	}
-
 	return &mms.BaseResp{
-		Msg: i18n.Success,
+		Msg: "grpc return ok",
 	}, nil
 }
 
 // insert init member data
 func (l *InitDatabaseLogic) insertMemberData() error {
-	var members []*ent.MemberCreate
-	members = append(members, l.svcCtx.DB.Member.Create().
-		SetUsername("normalMember").
-		SetNickname("Normal Member").
-		SetEmail("simpleadmin@gmail.com").
-		SetMobile("18888888888").
-		SetRankID(1).
-		SetPassword(encrypt.BcryptEncrypt("simple-admin")),
-	)
-
-	members = append(members, l.svcCtx.DB.Member.Create().
-		SetUsername("VIPMember").
-		SetNickname("VIP Member").
-		SetEmail("vip@gmail.com").
-		SetMobile("18888888888").
-		SetRankID(2).
-		SetPassword(encrypt.BcryptEncrypt("@qmcloud")),
-	)
-
-	err := l.svcCtx.DB.Member.CreateBulk(members...).Exec(l.ctx)
-	if err != nil {
-		logx.Errorw("failed to insert member data for initialization", logx.Field("detail", err))
-		return dberrorhandler.DefaultEntError(l.Logger, err, nil)
-	} else {
-		return nil
-	}
+	return nil
+	/*
+		user := model.Member{Username: "normalMember", Nickname: "Normal Member", Email: "xxx@qq.com", Mobile: "18888888888", RankID: 1, Password: encrypt.BcryptEncrypt("qmcloud")}
+		result := l.svcCtx.DB.Create(&user) // 通过数据的指针来创建
+		if result.Error != nil {
+			logx.Errorw("failed to insert member data for initialization", logx.Field("detail", result.Error))
+			return dberrorhandler.DefaultEntError(l.Logger, result.Error, nil)
+		} else {
+			return nil
+		}
+	*/
 }
 
 // insert init member rank data
 func (l *InitDatabaseLogic) insertMemberRankData() error {
-	var memberRanks []*ent.MemberRankCreate
+	return nil
+	/*var memberRanks []*ent.MemberRankCreate
 	memberRanks = append(memberRanks, l.svcCtx.DB.MemberRank.Create().
 		SetName("memberRank.normal").
 		SetCode("001").
@@ -114,11 +67,12 @@ func (l *InitDatabaseLogic) insertMemberRankData() error {
 		return dberrorhandler.DefaultEntError(l.Logger, err, nil)
 	} else {
 		return nil
-	}
+	}*/
 }
 
 func (l *InitDatabaseLogic) insertProviderData() error {
-	var providers []*ent.OauthProviderCreate
+	return nil
+	/*var providers []*ent.OauthProviderCreate
 
 	providers = append(providers, l.svcCtx.DB.OauthProvider.Create().
 		SetName("google").
@@ -150,5 +104,5 @@ func (l *InitDatabaseLogic) insertProviderData() error {
 		return dberrorhandler.DefaultEntError(l.Logger, err, nil)
 	} else {
 		return nil
-	}
+	}*/
 }

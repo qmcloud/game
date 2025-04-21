@@ -2,13 +2,12 @@ package member
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-
-	"github.com/qmcloud/game/ent/member"
+	"fmt"
+	"github.com/qmcloud/game/internal/model"
 	"github.com/qmcloud/game/internal/svc"
 	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
-
+	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,24 +26,25 @@ func NewGetMemberByUsernameLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *GetMemberByUsernameLogic) GetMemberByUsername(in *mms.UsernameReq) (*mms.MemberInfo, error) {
-	result, err := l.svcCtx.DB.Member.Query().Where(member.UsernameEQ(in.Username)).WithRanks().First(l.ctx)
-	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+	user := model.Members{Username: in.Username}
+	result := l.svcCtx.DB.Table("mms_members").First(&user)
+	if result.Error != nil {
+		return nil, dberrorhandler.DefaultEntError(l.Logger, result.Error, in)
 	}
-
+	fmt.Println(user)
+	ID := uint32(user.ID)
 	return &mms.MemberInfo{
-		Id:        pointy.GetPointer(result.ID.String()),
-		CreatedAt: pointy.GetPointer(result.CreatedAt.UnixMilli()),
-		UpdatedAt: pointy.GetPointer(result.UpdatedAt.UnixMilli()),
-		Status:    pointy.GetPointer(uint32(result.Status)),
-		Username:  &result.Username,
-		Password:  &result.Password,
-		Nickname:  &result.Nickname,
-		RankId:    &result.RankID,
-		RankCode:  &result.Edges.Ranks.Code,
-		Mobile:    &result.Mobile,
-		Email:     &result.Email,
-		Avatar:    &result.Avatar,
-		ExpiredAt: pointy.GetPointer(result.ExpiredAt.UnixMilli()),
+		Id:        &ID,
+		CreatedAt: pointy.GetPointer(user.CreatedAt.UnixMilli()),
+		UpdatedAt: pointy.GetPointer(user.UpdatedAt.UnixMilli()),
+		Status:    pointy.GetPointer(uint32(user.Status)),
+		Username:  &user.Username,
+		Password:  &user.Password,
+		Nickname:  &user.Nickname,
+		RankId:    &user.RankID,
+		Mobile:    &user.Mobile,
+		Email:     &user.Email,
+		Avatar:    &user.Avatar,
+		ExpiredAt: pointy.GetPointer(user.ExpiredAt.UnixMilli()),
 	}, nil
 }

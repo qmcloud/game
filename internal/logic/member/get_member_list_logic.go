@@ -2,12 +2,7 @@ package member
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-
-	"github.com/qmcloud/game/ent/member"
-	"github.com/qmcloud/game/ent/predicate"
 	"github.com/qmcloud/game/internal/svc"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -28,7 +23,8 @@ func NewGetMemberListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetMemberListLogic) GetMemberList(in *mms.MemberListReq) (*mms.MemberListResp, error) {
-	var predicates []predicate.Member
+	return nil, nil
+	/*var predicates []predicate.Member
 	if in.Username != nil {
 		predicates = append(predicates, member.UsernameContains(*in.Username))
 	}
@@ -75,4 +71,5 @@ func (l *GetMemberListLogic) GetMemberList(in *mms.MemberListReq) (*mms.MemberLi
 	}
 
 	return resp, nil
+	*/
 }

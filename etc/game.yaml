@@ -5,12 +5,14 @@ DatabaseConf:
   Type: mysql
   Host: 8.134.255.9
   Port: 13306
+  Config: charset=utf8mb4&parseTime=True&loc=Local
   DBName: qmy_qp
   Username: root
   Password: xhpyYCiMCFMB4iTx
+  MaxIdleConn: 10
   MaxOpenConn: 100
-  SSLMode: disable
-  CacheTime: 5
+  LogMode: error
+
 
 RedisConf:
   Host: 8.134.255.9:6379

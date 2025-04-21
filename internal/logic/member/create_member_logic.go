@@ -2,17 +2,17 @@ package member
 
 import (
 	"context"
-
-	"github.com/qmcloud/game/ent/member"
+	"fmt"
+	"github.com/qmcloud/game/internal/model"
 	"github.com/qmcloud/game/internal/svc"
 	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
-	"github.com/suyuan32/simple-admin-common/utils/encrypt"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-
 	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/suyuan32/simple-admin-common/utils/encrypt"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
+	"math/rand"
+	"time"
 )
 
 type CreateMemberLogic struct {
@@ -31,46 +31,44 @@ func NewCreateMemberLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Crea
 
 func (l *CreateMemberLogic) CreateMember(in *mms.MemberInfo) (*mms.BaseUUIDResp, error) {
 	if in.Mobile != nil {
-		checkMobile, err := l.svcCtx.DB.Member.Query().Where(member.MobileEQ(*in.Mobile)).Exist(l.ctx)
-		if err != nil {
-			return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+		var Finduser = model.Members{Mobile: *in.Mobile}
+		result := l.svcCtx.DB.First(&Finduser)
+		if result.Error != nil {
+			return nil, dberrorhandler.DefaultEntError(l.Logger, result.Error, in)
 		}
 
-		if checkMobile {
+		if result.RowsAffected > 0 {
 			return nil, errorx.NewInvalidArgumentError("login.mobileExist")
 		}
 	}
 
 	if in.Email != nil {
-		checkEmail, err := l.svcCtx.DB.Member.Query().Where(member.EmailEQ(*in.Email)).Exist(l.ctx)
-		if err != nil {
-			return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+		checkEmail := model.Members{Email: *in.Email}
+		resEmail := l.svcCtx.DB.First(&checkEmail)
+		if resEmail.Error != nil {
+			return nil, dberrorhandler.DefaultEntError(l.Logger, resEmail.Error, in)
 		}
 
-		if checkEmail {
+		if resEmail.RowsAffected > 0 {
 			return nil, errorx.NewInvalidArgumentError("login.signupUserExist")
 		}
 	}
-
-	query := l.svcCtx.DB.Member.Create().
-		SetNotNilStatus(pointy.GetStatusPointer(in.Status)).
-		SetNotNilUsername(in.Username).
-		SetNotNilNickname(in.Nickname).
-		SetNotNilRankID(in.RankId).
-		SetNotNilMobile(in.Mobile).
-		SetNotNilEmail(in.Email).
-		SetNotNilAvatar(in.Avatar).
-		SetNotNilWechatOpenID(in.WechatId).
-		SetNotNilExpiredAt(pointy.GetTimeMilliPointer(in.ExpiredAt))
-
-	if in.Password != nil {
-		query.SetNotNilPassword(pointy.GetPointer(encrypt.BcryptEncrypt(*in.Password)))
-	}
-	result, err := query.Save(l.ctx)
-
-	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+	if in.Username != nil {
+		//Username: *in.Username, Nickname: "test", Email: "xxx@xx.com", Mobile: "", RankID: 1, Password: encrypt.BcryptEncrypt(*in.Password)
+		user := model.Members{}
+		user.Username = *in.Username
+		user.Password = encrypt.BcryptEncrypt("qq407193275->TG:@qmcloud" + *in.Password)
+		user.Nickname = "test"
+		user.ExpiredAt = time.Now()
+		user.RankID = uint64(rand.Int63n(9999999999))
+		result := l.svcCtx.DB.Table("mms_members").Create(&user) // 通过数据的指针来创建
+		if result.Error != nil {
+			fmt.Println(result.Error)
+			return nil, dberrorhandler.DefaultEntError(l.Logger, result.Error, in)
+		}
+		return &mms.BaseUUIDResp{Msg: i18n.CreateSuccess}, result.Error
 	}
 
-	return &mms.BaseUUIDResp{Id: result.ID.String(), Msg: i18n.CreateSuccess}, nil
+	return nil, errorx.NewInvalidArgumentError("login.loginTypeForbidden")
+
 }

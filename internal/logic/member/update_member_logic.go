@@ -2,15 +2,10 @@ package member
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/utils/encrypt"
-	"github.com/suyuan32/simple-admin-common/utils/pointy"
-
 	"github.com/qmcloud/game/internal/svc"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
 
 	"github.com/suyuan32/simple-admin-common/i18n"
-	"github.com/suyuan32/simple-admin-common/utils/uuidx"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -29,7 +24,8 @@ func NewUpdateMemberLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upda
 }
 
 func (l *UpdateMemberLogic) UpdateMember(in *mms.MemberInfo) (*mms.BaseResp, error) {
-	query := l.svcCtx.DB.Member.UpdateOneID(uuidx.ParseUUIDString(*in.Id)).
+	return &mms.BaseResp{Msg: i18n.UpdateSuccess}, nil
+	/*query := l.svcCtx.DB.Member.UpdateOneID(uuidx.ParseUUIDString(*in.Id)).
 		SetNotNilStatus(pointy.GetStatusPointer(in.Status)).
 		SetNotNilUsername(in.Username).
 		SetNotNilNickname(in.Nickname).
@@ -51,4 +47,6 @@ func (l *UpdateMemberLogic) UpdateMember(in *mms.MemberInfo) (*mms.BaseResp, err
 	}
 
 	return &mms.BaseResp{Msg: i18n.UpdateSuccess}, nil
+
+	*/
 }

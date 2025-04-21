@@ -4,10 +4,8 @@ import (
 	"context"
 
 	"github.com/qmcloud/game/internal/svc"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -26,7 +24,8 @@ func NewCreateMemberRankLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *CreateMemberRankLogic) CreateMemberRank(in *mms.MemberRankInfo) (*mms.BaseIDResp, error) {
-	result, err := l.svcCtx.DB.MemberRank.Create().
+	return nil, nil
+	/*result, err := l.svcCtx.DB.MemberRank.Create().
 		SetNotNilName(in.Name).
 		SetNotNilCode(in.Code).
 		SetNotNilDescription(in.Description).
@@ -38,4 +37,6 @@ func (l *CreateMemberRankLogic) CreateMemberRank(in *mms.MemberRankInfo) (*mms.B
 	}
 
 	return &mms.BaseIDResp{Id: result.ID, Msg: i18n.CreateSuccess}, nil
+
+	*/
 }

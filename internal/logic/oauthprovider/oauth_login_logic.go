@@ -2,13 +2,8 @@ package oauthprovider
 
 import (
 	"context"
-	"github.com/qmcloud/game/internal/utils/dberrorhandler"
 	mms "github.com/qmcloud/game/types/game"
-	"strings"
-
 	"golang.org/x/oauth2"
-
-	"github.com/qmcloud/game/ent/oauthprovider"
 
 	"github.com/qmcloud/game/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -34,35 +29,39 @@ func NewOauthLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OauthL
 }
 
 func (l *OauthLoginLogic) OauthLogin(in *mms.OauthLoginReq) (*mms.OauthRedirectResp, error) {
-	var config oauth2.Config
-	if v, ok := providerConfig[in.Provider]; ok {
-		config = v
-	} else {
-		p, err := l.svcCtx.DB.OauthProvider.Query().Where(oauthprovider.NameEQ(in.Provider)).First(l.ctx)
-		if err != nil {
-			return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+	return nil, nil
+	/*
+		var config oauth2.Config
+		if v, ok := providerConfig[in.Provider]; ok {
+			config = v
+		} else {
+			p, err := l.svcCtx.DB.OauthProvider.Query().Where(oauthprovider.NameEQ(in.Provider)).First(l.ctx)
+			if err != nil {
+				return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+			}
+
+			providerConfig[p.Name] = oauth2.Config{
+				ClientID:     p.ClientID,
+				ClientSecret: p.ClientSecret,
+				Endpoint: oauth2.Endpoint{
+					AuthURL:   p.AuthURL,
+					TokenURL:  p.TokenURL,
+					AuthStyle: oauth2.AuthStyle(p.AuthStyle),
+				},
+				RedirectURL: p.RedirectURL,
+				Scopes:      strings.Split(p.Scopes, " "),
+			}
+			config = providerConfig[p.Name]
+
+			if _, ok := userInfoURL[p.Name]; !ok {
+				userInfoURL[p.Name] = p.InfoURL
+			}
+
 		}
 
-		providerConfig[p.Name] = oauth2.Config{
-			ClientID:     p.ClientID,
-			ClientSecret: p.ClientSecret,
-			Endpoint: oauth2.Endpoint{
-				AuthURL:   p.AuthURL,
-				TokenURL:  p.TokenURL,
-				AuthStyle: oauth2.AuthStyle(p.AuthStyle),
-			},
-			RedirectURL: p.RedirectURL,
-			Scopes:      strings.Split(p.Scopes, " "),
-		}
-		config = providerConfig[p.Name]
+		url := config.AuthCodeURL(in.State)
 
-		if _, ok := userInfoURL[p.Name]; !ok {
-			userInfoURL[p.Name] = p.InfoURL
-		}
+		return &mms.OauthRedirectResp{Url: url}, nil
 
-	}
-
-	url := config.AuthCodeURL(in.State)
-
-	return &mms.OauthRedirectResp{Url: url}, nil
+	*/
 }
